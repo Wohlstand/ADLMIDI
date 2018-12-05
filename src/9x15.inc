@@ -141,7 +141,7 @@ true);
         return
           (index < 160)
           ? ((index <  127) ? index - 0 : Help(index,InRecursion))
-          : ((index <  255) ? index - 33 : Help(index,InRecursion))
+          : (                 index - 33)
         ;
     }
     uint_least8_t operator[] (uint_least8_t index) const { return Find(index, false); }

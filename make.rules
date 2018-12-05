@@ -9,12 +9,13 @@ ARCHFILES=\
 	src/adldata.cc src/adldata.hh \
 	src/fraction \
 	src/puzzlegame.inc \
+	src/9x15.inc \
 	\
 	utils/dumpbank.cc \
 	utils/dumpmiles.cc \
 	utils/gen_adldata.cc \
 	\
-	midiplay.bas \
+	doc/midiplay.bas \
 	progdesc.php \
 	make.rules \
 	\
@@ -96,43 +97,42 @@ ARCHFILES=\
 	fm_banks/tmb_files/swtimbr.tmb \
 	fm_banks/tmb_files/bloodtmb.tmb \
 	fm_banks/raptor/genmidi.op2 \
-	fm_banks/misc_files/cartooners-adlib-decrypted.dat
+	fm_banks/misc_files/cartooners-adlib-decrypted.dat \
+	\
+	obj/.keep
 
 INSTALLPROGS=adlmidi
 
 all: adlmidi gen_adldata dumpmiles dumpbank
 
-adlmidi: tmp/midiplay.o tmp/dbopl.o tmp/adldata.o
+adlmidi: obj/midiplay.o obj/dbopl.o obj/adldata.o
 	$(CXXLINK)  $^  $(DEBUG) $(SDL) -o $@ $(LDLIBS)
 
-tmp/midiplay.o: src/midiplay.cc src/dbopl.h src/adldata.hh tmp
+obj/midiplay.o: src/midiplay.cc src/dbopl.h src/adldata.hh
 	$(CXX) $(CPPFLAGS) $<  $(DEBUG) $(SDL) -c -o $@
 
-tmp/dbopl.o: src/dbopl.cpp src/dbopl.h tmp
+obj/dbopl.o: src/dbopl.cpp src/dbopl.h
 	$(CXX) $(CPPFLAGS) $<  $(DEBUG)  -c -o $@
 
-tmp/adldata.o: src/adldata.cc src/adldata.hh tmp
+obj/adldata.o: src/adldata.cc src/adldata.hh
 	$(CXX) $(CPPFLAGS) $<  $(DEBUG)  -c -o $@
 
-gen_adldata: tmp/gen_adldata.o tmp/dbopl.o
+gen_adldata: obj/gen_adldata.o obj/dbopl.o
 	$(CXXLINK)  $^  $(DEBUG)  -o $@  $(LDLIBS)
 
-tmp/gen_adldata.o: utils/gen_adldata.cc src/dbopl.h tmp
+obj/gen_adldata.o: utils/gen_adldata.cc src/dbopl.h
 	$(CXX) $(CPPFLAGS) -I./src $<  $(DEBUG)  -c -o $@
 
-dumpmiles: tmp/dumpmiles.o
+dumpmiles: obj/dumpmiles.o
 	$(CXXLINK)  $^  $(DEBUG)  -o $@  $(LDLIBS)
 
-tmp/dumpmiles.o: utils/dumpmiles.cc tmp
+obj/dumpmiles.o: utils/dumpmiles.cc
 	$(CXX) $(CPPFLAGS) $<  $(DEBUG)  -c -o $@
 
-dumpbank: tmp/dumpbank.o
+dumpbank: obj/dumpbank.o
 	$(CXXLINK)  $^  $(DEBUG)  -o $@  $(LDLIBS)
 
-tmp/dumpbank.o: utils/dumpbank.cc tmp
+obj/dumpbank.o: utils/dumpbank.cc
 	$(CXX) $(CPPFLAGS) $<  $(DEBUG)  -c -o $@
-
-tmp:
-	mkdir $@
 
 include depfun.mak
