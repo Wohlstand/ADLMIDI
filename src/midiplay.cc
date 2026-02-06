@@ -8,6 +8,7 @@
 #include <set>
 #include <cstdlib>
 #include <cstring>
+#include <cstdint>
 #include <cmath>
 #include <unistd.h>
 #include <stdarg.h>
